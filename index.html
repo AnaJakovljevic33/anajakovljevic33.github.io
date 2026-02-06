@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine 💖</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.card {
+    background: white;
+    padding: 30px 25px;
+    border-radius: 25px;
+    text-align: center;
+    width: 90%;
+    max-width: 360px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    animation: pop 1s ease;
+}
+
+@keyframes pop {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+h1 {
+    color: #ff4d6d;
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.name {
+    font-size: 28px;
+    font-weight: bold;
+    color: #ff1e4d;
+    margin-bottom: 20px;
+}
+
+.buttons {
+    display: flex;
+    gap: 15px;
+}
+
+button {
+    flex: 1;
+    font-size: 18px;
+    padding: 12px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.yes {
+    background: #ff4d6d;
+    color: white;
+}
+
+.yes:hover {
+    transform: scale(1.1);
+}
+
+.no {
+    background: #ddd;
+    color: #555;
+}
+
+.message {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #ff4d6d;
+    display: none;
+}
+
+/* Falling hearts */
+.heart {
+    position: absolute;
+    font-size: 20px;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-10vh); opacity: 1; }
+    100% { transform: translateY(110vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" loop>
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_5a9f82b4e6.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card">
+    <h1>Will you be my Valentine?</h1>
+    <div class="name">Andrija 💖</div>
+
+    <div class="buttons">
+        <button class="yes" onclick="yesClicked()">Yes 💘</button>
+        <button class="no" id="noBtn" onclick="noClicked()">No</button>
+    </div>
+
+    <div class="message" id="message">
+        No is not an option 😌❤️
+    </div>
+</div>
+
+<script>
+let noClicks = 0;
+let musicStarted = false;
+
+function startMusic() {
+    if (!musicStarted) {
+        document.getElementById("music").play();
+        musicStarted = true;
+    }
+}
+
+function noClicked() {
+    startMusic();
+    noClicks++;
+    document.getElementById("message").style.display = "block";
+
+    if (navigator.vibrate) {
+        navigator.vibrate(200);
+    }
+
+    if (noClicks >= 2) {
+        const noBtn = document.getElementById("noBtn");
+        noBtn.innerText = "Yes 💖";
+        noBtn.classList.remove("no");
+        noBtn.classList.add("yes");
+        noBtn.onclick = yesClicked;
+    }
+}
+
+function yesClicked() {
+    startMusic();
+    document.body.innerHTML = `
+        <div style="
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            color:white;
+            font-size:26px;
+            padding:20px;
+        ">
+            Andrija said YES! 💕<br><br>
+            Pametan izbor, Andrija 😏❤️
+        </div>
+    `;
+}
+
+// Hearts
+setInterval(() => {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = Math.random() > 0.5 ? "❤️" : "💖";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+}, 300);
+</script>
+
+</body>
+</html>
